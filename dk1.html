@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Click MOM - Login</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: skyblue;
+}
+header {
+    background: #2c3e50;
+    color: rgb(104, 196, 142);
+    padding: 12px;
+    text-align: center;
+}
+.container {
+    width: 400px;
+    margin: 50px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+button {
+    background: #70aa88;
+    color: rgb(255,132,75);
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover {
+    background: #ffb171;
+}
+</style>
+</head>
+<body>
+<header>
+    <h1>One Click MOM</h1>
+    <p>Login to access your dashboard</p>
+</header>
+
+<div class="container">
+    <h2>User Login</h2>
+    <input type="email" id="userEmail" placeholder="Email">
+    <input type="password" id="userPassword" placeholder="Password">
+    <button onclick="loginUser('user')">Login as User</button>
+
+    <hr>
+    <h2>Admin Login</h2>
+    <input type="email" id="adminEmail" placeholder="Admin Email">
+    <input type="password" id="adminPassword" placeholder="Admin Password">
+    <button onclick="loginUser('admin')">Login as Admin</button>
+</div>
+
+<script>
+function loginUser(role) {
+    // Placeholder login validation
+    if (role === 'user') {
+        if(document.getElementById('userEmail').value && document.getElementById('userPassword').value) {
+            localStorage.setItem('role', 'user');
+            window.location.href = 'dashboard.html';
+        } else alert("Enter valid User credentials.");
+    } else {
+        if(document.getElementById('adminEmail').value && document.getElementById('adminPassword').value) {
+            localStorage.setItem('role', 'admin');
+            window.location.href = 'dashboard.html';
+        } else alert("Enter valid Admin credentials.");
+    }
+}
+</script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Click MOM - Dashboard</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: skyblue;
+}
+header {
+    background: #2c3e50;
+    color: rgb(104, 196, 142);
+    padding: 12px;
+    text-align: center;
+}
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 18px;
+}
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+button {
+    background: #70aa88;
+    color: rgb(255, 132, 75);
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover {
+    background: #ffb171;
+}
+.dashboard-box {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    width: 23%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>One Click MOM - Dashboard</h1>
+    <button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+<!-- Dashboard stats -->
+<div class="card">
+    <h2>Statistics</h2>
+    <div class="dashboard-box">
+        <div class="stat"><h3 id="meetingsCount">0</h3><p>Total Meetings</p></div>
+        <div class="stat"><h3 id="offlineCount">0</h3><p>Offline Meetings</p></div>
+        <div class="stat"><h3 id="zoomCount">0</h3><p>Zoom Meetings</p></div>
+        <div class="stat"><h3 id="onlineCount">0</h3><p>Other Online Meetings</p></div>
+    </div>
+</div>
+
+<!-- Only visible for Admin -->
+<div class="card" id="adminPanel" style="display:none;">
+    <h2>Admin Controls</h2>
+    <p>Here Admin can manage users, view reports, and configure system settings.</p>
+</div>
+
+<!-- Visible for Users -->
+<div class="card" id="userPanel" style="display:none;">
+    <h2>User Panel</h2>
+    <p>Generate MOM, upload transcripts/images, and view your personal dashboard.</p>
+</div>
+
+</div>
+
+<script>
+// Check user role and show panels accordingly
+const role = localStorage.getItem('role');
+if(role === 'admin') {
+    document.getElementById('adminPanel').style.display = 'block';
+} else if(role === 'user') {
+    document.getElementById('userPanel').style.display = 'block';
+} else {
+    // If no role found, redirect to login
+    window.location.href = 'index.html';
+}
+
+function logout() {
+    localStorage.removeItem('role');
+    window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One Click MOM</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: skyblue;
+}
+header {
+    background: #2c3e50;
+    color: rgb(104, 196, 142);
+    padding: 12px;
+    text-align: center;
+}
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 18px;
+}
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+input, textarea, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+button {
+    background: #70aa88;
+    color: rgb(255, 132, 75);
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover {
+    background: #ffb171;
+}
+.section-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #799ec4;
+}
+.dashboard-box {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.stat {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    width: 23%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>One Click MOM</h1>
+    <p>Intelligent Minutes of Meeting System</p>
+</header>
+
+<div class="container">
+
+<!-- LOGIN SECTION -->
+<div class="card">
+    <div class="section-title">Login</div>
+    <input type="email" placeholder="Email">
+    <input type="password" placeholder="Password">
+    <button>Login</button>
+    <button onclick="registerUser()">Register</button>
+</div>
+
+<!-- MEETING INPUT -->
+<div class="card">
+    <div class="section-title">Upload Meeting Data</div>
+    <label>Upload Transcript (.txt / .docx)</label>
+    <input type="file">
+    <label>Upload Image (Handwritten Notes)</label>
+    <input type="file">
+    <label>Upload Audio (Optional)</label>
+    <input type="file">
+    <label>Or Enter Text Manually</label>
+    <textarea rows="6" placeholder="Paste meeting transcript here..."></textarea>
+    <button onclick="generateMOM()">Generate MOM</button>
+</div>
+
+<!-- MOM OUTPUT -->
+<div class="card">
+    <div class="section-title">Generated Minutes of Meeting</div>
+    <div id="momOutput">
+        <p><strong>Discussion Points:</strong></p>
+        <ul id="discussionList"></ul>
+
+        <p><strong>Decisions Taken:</strong></p>
+        <ul id="decisionList"></ul>
+
+        <p><strong>Action Items:</strong></p>
+        <ul id="actionList"></ul>
+
+        <p><strong>Open Points:</strong></p>
+        <ul id="openList"></ul>
+    </div>
+    <button onclick="downloadPDF()">Download PDF</button>
+    <p id="downloadpdf"></p>
+</div>
+
+
+
+<!-- CARBON FOOTPRINT CALCULATOR -->
+<div class="card">
+    <div class="section-title">Carbon Footprint Calculator</div>
+
+    <label>Pages per Meeting</label>
+    <input type="number" id="pages">
+
+    <label>Number of Members</label>
+    <input type="number" id="members">
+
+    <label>Distance Avoided (km)</label>
+    <input type="number" id="distance">
+
+    <button onclick="calculateCarbon()">Calculate Savings</button>
+    <p id="carbonResult"></p>
+</div>
+
+<!-- DASHBOARD -->
+<div class="card">
+    <div class="section-title">Dashboard</div>
+    <div class="dashboard-box">
+        <div class="stat">
+            <h3 id="meetingsCount">0</h3>
+            <p>Total Meetings</p>
+        </div>
+        <div class="stat">
+            <h3 id="pagesSaved">0</h3>
+            <p>Pages Saved</p>
+        </div>
+        <div class="stat">
+            <h3 id="co2Saved">0</h3>
+            <p>CO₂ Saved (kg)</p>
+        </div>
+        <div class="stat">
+            <h3 id="treesSaved">0</h3>
+            <p>Trees Saved</p>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+let totalPages = 0;
+let totalCO2 = 0;
+
+// Generate MOM (sample demo)
+function generateMOM() {
+    document.getElementById("discussionList").innerHTML = "<li>Project timeline discussion</li>";
+    document.getElementById("decisionList").innerHTML = "<li>Approved budget for next phase</li>";
+    document.getElementById("actionList").innerHTML = "<li>John will submit report by Friday</li>";
+    document.getElementById("openList").innerHTML = "<li>Pending vendor confirmation</li>";
+}
+
+// Calculate Carbon Footprint
+function calculateCarbon() {
+    let pages = parseInt(document.getElementById("pages").value) || 0;
+    let members = parseInt(document.getElementById("members").value) || 0;
+    let distance = parseFloat(document.getElementById("distance").value) || 0;
+
+    let paperSaved = pages * members;
+    let co2Paper = paperSaved * 0.005;
+    let co2Travel = distance * 0.21;
+    let total = co2Paper + co2Travel;
+
+    totalPages += paperSaved;
+    totalCO2 += total;
+
+    document.getElementById("carbonResult").innerHTML =
+        "Paper Saved: " + paperSaved + " pages <br> CO₂ Saved: " + total.toFixed(2) + " kg";
+
+    document.getElementById("pagesSaved").innerText = totalPages;
+    document.getElementById("co2Saved").innerText = totalCO2.toFixed(2);
+    document.getElementById("treesSaved").innerText = (totalPages / 8000).toFixed(2);
+}
+
+// Download PDF (placeholder)
+function downloadPDF() {
+    alert("PDF export feature will be connected to backend.");
+}
+
+// Calculate Meetings and update dashboard
+function calculateMeetings() {
+    let total = parseInt(document.getElementById("totalMeetingsInput").value) || 0;
+    let offline = parseInt(document.getElementById("offlineMeetingsInput").value) || 0;
+    let online = parseInt(document.getElementById("onlineMeetingsInput").value) || 0;
+
+    if (offline + online !== total) {
+        alert("Warning: Offline + Online meetings do not sum up to Total Meetings!");
+    }
+
+    document.getElementById("meetingResult").innerHTML =
+        `Total Meetings: ${total} <br> Offline Meetings: ${offline} <br> Online Meetings: ${online}`;
+
+    // Update dashboard
+    document.getElementById("meetingsCount").innerText = total;
+}
+
+// Placeholder register function
+function registerUser() {
+    alert("Registration feature not implemented yet.");
+}
+</script>
+
+</body>
+</html>
